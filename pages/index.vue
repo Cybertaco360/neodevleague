@@ -2,9 +2,11 @@
 const route = useRoute()
 </script>
 
+<script src="index_script.js"></script>
+
 <template>
   <div>
-    <button>Microphone Image Placeholder</button>
+    <button @click="voiceInput">Microphone Image Placeholder</button>
     <span>Text Box Placeholder</span>
   </div>
 </template>
