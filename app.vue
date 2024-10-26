@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <button :class="{ active: isRecording }" @click="toggleMic">Record</button>
-    <div class="transcript">{{ transcript }}</div>
+    <div contenteditable="true" class="transcript">{{ transcript }}</div>
     <button>Send to calendar</button>
   </div>
 </template>
