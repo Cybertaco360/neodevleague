@@ -9,8 +9,8 @@
   export default {
     data() {
       return {
-        recognition: null, // Stores SpeechRecognition instance
-        transcript: '', // Stores transcribed text
+        recognition: null,
+        transcript: '',
       };
     },
     mounted() {

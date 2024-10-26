@@ -2,9 +2,9 @@
   const route = useRoute()
 </script>
 
-<script src="../components/scripts.js"></script>
 
 <template>
+  <SpeechToText />
   <div>
     <button>Microphone Image Placeholder</button>
     <span>Text Box Placeholder</span>
