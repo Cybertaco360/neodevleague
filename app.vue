@@ -2,12 +2,12 @@
   <div class="app">
     <button :class="{ active: isRecording }" @click="toggleMic">Record</button>
     <div contenteditable="true" class="transcript">{{ transcript }}</div>
-    <button>Send to calendar</button>
+    <button @click="sendData">Send data</button>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios';
+import axios from 'axios'; // From ChatGPT
 // Code cited from TylerPottsDev:
 // https://github.com/TylerPottsDev/yt-vue-voice-recognition/blob/master/src/App.vue
 import { ref, onMounted } from 'vue';
@@ -63,7 +63,21 @@ const toggleMic = () => {
     sr.start();
   }
 };
-// End of code cited
+// End of code cited from TylerPottsDev
+
+// Start of code from ChatGPT
+const sendData = async () => {
+    try {
+        const response = await axios.post('http://localhost:5000/api/data', results);
+        console.log(response.data);  // Handle the response as needed
+    } catch (error) {
+        console.error('Error sending data:', error.response.data);
+    }
+};
+
+sendData();
+// End of code from ChatGPT
+
 
 </script>
 
