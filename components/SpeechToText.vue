@@ -1,66 +1,68 @@
 <template>
-    <div>
-      <button @click="startRecognition">Start Speech Recognition</button>
-      <p>{{ transcript }}</p>
+    <div class="app">
+        <button :class="mic" @click="toggleMic" >Record</button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        recognition: null,
-        transcript: '',
-      };
-    },
-    mounted() {
-      // Check if browser supports SpeechRecognition
-      if ('webkitSpeechRecognition' in window) {
-        this.recognition = new window.webkitSpeechRecognition();
-        this.recognition.continuous = false;
-        this.recognition.interimResults = true;
-        this.recognition.lang = 'en-US';
-  
-        // Capture the results and update the transcript
-        this.recognition.onresult = (event) => {
-          let interimTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              this.transcript += event.results[i][0].transcript;
-            } else {
-              interimTranscript += event.results[i][0].transcript;
-            }
-          }
-          this.transcript = this.transcript.trim() + interimTranscript;
-        };
-  
-        // Handle errors and end events
-        this.recognition.onerror = (event) => {
-          console.error("Speech recognition error:", event.error);
-        };
-  
-        this.recognition.onend = () => {
-          console.log("Speech recognition ended");
-        };
-      } else {
-        alert("Your browser does not support speech recognition.");
-      }
-    },
-    methods: {
-      startRecognition() {
-        if (this.recognition) {
-          this.transcript = ''; // Clear the transcript
-          this.recognition.start(); // Start recognition
-        }
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  button {
-    padding: 8px 12px;
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  </style>
+    <div class="transcript" v-text="transcript"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+const transcript = ref('')
+const isRecording = ref(false)
+
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
+const sr = new Recognition()
+
+onMounted(() => {
+	sr.continuous = true
+	sr.interimResults = true
+
+	sr.onstart = () => {
+		console.log('SR Started')
+		isRecording.value = true
+	}
+
+	sr.onend = () => {
+		console.log('SR Stopped')
+		isRecording.value = false
+	}
+
+	sr.onresult = (evt) => {
+		for (let i = 0; i < evt.results.length; i++) {
+			const result = evt.results[i]
+
+			if (result.isFinal) CheckForCommand(result)
+		}
+
+		const t = Array.from(evt.results)
+			.map(result => result[0])
+			.map(result => result.transcript)
+			.join('')
+		
+		transcript.value = t
+	}
+})
+
+const CheckForCommand = (result) => {
+	const t = result[0].transcript;
+	if (t.includes('stop recording')) {
+		sr.stop()
+	} else if (
+		t.includes('what is the time') ||
+		t.includes('what\'s the time')
+	) {
+		sr.stop()
+		alert(new Date().toLocaleTimeString())
+		setTimeout(() => sr.start(), 100)
+	}
+}
+
+const ToggleMic = () => {
+	if (isRecording.value) {
+		sr.stop()
+	} else {
+		sr.start()
+	}
+}
+// TylerPottsDev https://github.com/TylerPottsDev/yt-vue-voice-recognition/
+</script>
