@@ -2,11 +2,14 @@
   <div class="app">
     <button :class="{ active: isRecording }" @click="toggleMic">Record</button>
     <div class="transcript">{{ transcript }}</div>
+    <button>Send to calendar</button>
   </div>
 </template>
 
 <script setup>
-// Code cited
+import axios from 'axios';
+// Code cited from TylerPottsDev:
+// https://github.com/TylerPottsDev/yt-vue-voice-recognition/blob/master/src/App.vue
 import { ref, onMounted } from 'vue';
 
 const transcript = ref('');
@@ -60,6 +63,8 @@ const toggleMic = () => {
     sr.start();
   }
 };
+// End of code cited
+
 </script>
 
 <style scoped>
