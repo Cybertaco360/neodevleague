@@ -6,16 +6,16 @@
 </template>
 
 <script setup>
+// Code cited
 import { ref, onMounted } from 'vue';
 
-// Define reactive variables for transcript text and recording status
 const transcript = ref('');
 const isRecording = ref(false);
 
 let sr;
 
 onMounted(() => {
-  // Initialize SpeechRecognition only if supported and in the browser
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (SpeechRecognition) {
     sr = new SpeechRecognition();
@@ -51,17 +51,6 @@ onMounted(() => {
     console.error("Speech recognition not supported in this browser.");
   }
 });
-
-// Function to handle specific commands
-const checkForCommand = (text) => {
-  if (text.includes('stop recording')) {
-    sr.stop();
-  } else if (text.includes('what is the time') || text.includes("what's the time")) {
-    alert(new Date().toLocaleTimeString());
-    sr.stop();
-    setTimeout(() => sr.start(), 100);  // Restart recognition after showing time
-  }
-};
 
 // Toggle the microphone on and off
 const toggleMic = () => {
