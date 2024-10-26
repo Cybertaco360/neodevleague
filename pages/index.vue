@@ -2,7 +2,7 @@
 const route = useRoute()
 </script>
 
-<script src="index_script.js"></script>
+<script src="scripts.js"></script>
 
 <template>
   <div>
