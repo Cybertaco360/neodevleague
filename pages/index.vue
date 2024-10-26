@@ -63,6 +63,7 @@ const ToggleMic = () => {
 	<div class="app">
 		<button :class="`mic`" @click="ToggleMic">Record</button>
 		<div class="transcript" v-text="transcript"></div>
+    <button>Send to calendar</button>
 	</div>
 </template>
 
